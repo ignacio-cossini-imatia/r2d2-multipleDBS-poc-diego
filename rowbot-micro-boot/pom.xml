@@ -23,10 +23,10 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>rowbot-micro-api</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>rowbot-micro-service</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>${project.groupId}</groupId>-->
+<!--			<artifactId>rowbot-micro-service</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>rowbot-micro-model</artifactId>

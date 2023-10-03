@@ -19,39 +19,30 @@ public abstract class AbstractCRUDController<E extends H2Entity, S extends CRUDS
 	@Autowired
 	protected S service;
 
-	//	@Autowired
-	//	protected V validator;
-
 	private static final Logger logger = LoggerFactory.getLogger(AbstractCRUDController.class);
 
 	private static final String ERROR_NOT_SORTED = "Paged queries must have at least one sort field with the desired order";
 
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity create(@RequestBody final E entity) {
-		//String validationError = validator.validateForCreate(entity);
-		//		if(validationError != null){
-		//			return new ResponseEntity<String>(validationError, HttpStatus.BAD_REQUEST);
-		//		}
 		DatabaseContextHolder.set("miDB");
 		E createdEntity;
 		try {
 			createdEntity = service.create("miDB", entity);
 		} catch (ValidationException ex) {
 			logger.debug(ex.getMessage());
-			DatabaseContextHolder.clear();
 			return new ResponseEntity<String>(validationProblemMessage(ex), HttpStatus.BAD_REQUEST);
+		} finally {
+			DatabaseContextHolder.clear();
 		}
-		DatabaseContextHolder.clear();
+
 		return new ResponseEntity<E>(createdEntity, HttpStatus.OK);
 	}
 
 
 	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity update(@RequestBody final E entity) {
-		//		String validationError = validator.validateForUpdate(entity);
-		//		if(validationError != null){
-		//			return new ResponseEntity<String>(validationError, HttpStatus.BAD_REQUEST);
-		//		}
+		DatabaseContextHolder.set("miDB");
 		E updatedEntity;
 		try {
 			updatedEntity = service.update("miDB", entity);
@@ -61,6 +52,8 @@ public abstract class AbstractCRUDController<E extends H2Entity, S extends CRUDS
 		} catch (IdNotExistentOnDBException ex) {
 			logger.debug(ex.getMessage());
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		} finally {
+			DatabaseContextHolder.clear();
 		}
 		return new ResponseEntity<E>(updatedEntity, HttpStatus.OK);
 	}
@@ -73,18 +66,24 @@ public abstract class AbstractCRUDController<E extends H2Entity, S extends CRUDS
 
 	@DeleteMapping(path = "/{id}")
 	public ResponseEntity delete(@PathVariable(name = "id", required = true) final Long entityId) {
+		DatabaseContextHolder.set("miDB");
 		try {
 			service.delete("miDB", entityId);
 		} catch (IdNotExistentOnDBException ex) {
 			logger.debug(ex.getMessage());
 			return new ResponseEntity<>(nonexistentEntityIdMessage(entityId), HttpStatus.NOT_FOUND);
+		} finally {
+			DatabaseContextHolder.clear();
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<E> read(@PathVariable(name = "id", required = true) final Long entityId) {
-		return service.read("miDB", entityId).map(entity -> new ResponseEntity<E>(entity, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+		DatabaseContextHolder.set("miDB");
+		ResponseEntity<E> response = service.read("miDB", entityId).map(entity -> new ResponseEntity<E>(entity, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+		DatabaseContextHolder.clear();
+		return response;
 	}
 
 //	@GetMapping(path = "/search")
