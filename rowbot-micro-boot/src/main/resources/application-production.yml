@@ -1,0 +1,16 @@
+logging:
+  level:
+    root: info
+server:
+  port: 8080
+management:
+  security:
+    enabled: false
+  server:
+    base-path: /
+    port: 8081
+    servlet:
+      context-path: /
+  endpoints:
+    web:
+      base-path: /ontimize

@@ -1,0 +1,88 @@
+<mat-toolbar class="mat-toolbar-single-row" >
+  <div class="mat-toolbar-tools divPrincipal" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="15%">
+    <button mat-raised-button (click)='goBack()'>{{ 'CANCEL' | oTranslate }}</button>
+    <button mat-raised-button (click)='save()'>{{ 'SAVE' | oTranslate }}</button>
+  </div>
+</mat-toolbar>
+
+<div class="mat-elevation-z8 form-group divPrincipal" [formGroup]="pacienteCreate"  fxLayoutAlign="space-around center" fxLayout="row">
+
+  <div class="alto" fxLayout="column" fxLayoutAlign="space-around center" fxflex="20%">
+    <mat-form-field appearance="fill">
+      <mat-label>{{ 'nombre' | oTranslate }}</mat-label>
+      <input matInput  formControlName="nombre" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{ 'apellidos' | oTranslate }}</mat-label>
+      <input matInput   formControlName="apellidos" required>
+    </mat-form-field>
+    <div fxLayout="row" fxflex="100%">
+      <mat-form-field>
+        <mat-label>{{ 'sexo' | oTranslate }}</mat-label>
+        <mat-select  formControlName="sexo">
+          <mat-option *ngFor="let sexo of sexos" [value]="sexo.value">
+            {{sexo.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'fechaNacimiento' | oTranslate }}</mat-label>
+        <input matInput [max]="maxDate" [matDatepicker]="picker" formControlName="fechaNacimiento" required>
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle  [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxflex="100%">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'dni' | oTranslate }}</mat-label>
+        <input matInput  oninput="this.value = this.value.toUpperCase()"  formControlName="dni" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'telefono' | oTranslate }}</mat-label>
+        <input matInput formControlName="telefono">
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>{{ 'email' | oTranslate }}</mat-label>
+      <input matInput type="email" formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'notas' | oTranslate }}</mat-label>
+      <textarea matInput formControlName="notas"></textarea>
+    </mat-form-field>
+
+  </div>
+  <div class="alto" formGroupName="direccion" fxLayoutAlign="space-around center" fxLayout="column">
+
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'calle' | oTranslate }}</mat-label>
+        <input matInput formControlName="calle" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'portal' | oTranslate }}</mat-label>
+        <input matInput formControlName="portal">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'piso' | oTranslate }}</mat-label>
+        <input matInput formControlName="piso">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'codigoPostal' | oTranslate }}</mat-label>
+        <input matInput formControlName="codigoPostal">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'ciudad' | oTranslate }}</mat-label>
+        <input matInput formControlName="ciudad">
+      </mat-form-field>
+
+  </div>
+
+
+
+
+
+</div>

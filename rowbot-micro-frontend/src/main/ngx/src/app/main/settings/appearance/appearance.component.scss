@@ -1,0 +1,27 @@
+.o-row.setting-column {
+  margin-bottom: 20px;
+
+  .mat-radio-group .mat-radio-button {
+    padding: 4px 14px;
+
+    .theme-option {
+      height: 36px;
+      width: 36px;
+
+      .theme-option-background {
+        border-radius: 50%;
+        height: 100%;
+      }
+    }
+  }
+
+  .theme-radio-group {
+    .mat-radio-container {
+      display: none;
+    }
+
+    .mat-radio-label-content {
+      padding: 0;
+    }
+  }
+}

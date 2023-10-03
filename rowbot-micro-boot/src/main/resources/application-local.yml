@@ -1,0 +1,23 @@
+logging:
+  level:
+    root: info
+server:
+  port: 8080
+ontimize:
+  multitenant:
+    configuration:
+      store-repository:
+        url: http://localhost:8081/
+        username: demo
+        password: demouser
+spring:
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      temp:
+        use_jdbc_metadata_defaults: false

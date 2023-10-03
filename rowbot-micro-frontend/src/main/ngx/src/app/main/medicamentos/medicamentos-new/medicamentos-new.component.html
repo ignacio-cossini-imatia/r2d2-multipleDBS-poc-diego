@@ -1,0 +1,50 @@
+<mat-toolbar class="mat-toolbar-single-row">
+  <div class="mat-toolbar-tools divPrincipal" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="15%">
+    <button mat-raised-button (click)='goBack()'>{{ 'CANCEL' | oTranslate }}</button>
+    <button mat-raised-button (click)='save()'>{{ 'SAVE' | oTranslate }}</button>
+  </div>
+</mat-toolbar>
+
+<div class="mat-elevation-z8" fxLayout="column" [formGroup]="form">
+  <mat-form-field class="mini-margin"  appearance="fill">
+    <mat-label>{{ 'medicamento' | oTranslate }}</mat-label>
+    <input matInput formControlName="nombre">
+  </mat-form-field>
+  <mat-form-field class="mini-margin"  appearance="fill">
+    <mat-label>{{ 'descripción' | oTranslate }}</mat-label>
+    <input matInput formControlName="descripcion">
+  </mat-form-field>
+  <mat-form-field class="mini-margin"  appearance="fill">
+    <mat-label>{{ 'codigo.nacional' | oTranslate }}</mat-label>
+    <input matInput formControlName="codigoNacional" [textMask]="{mask: mask}">
+  </mat-form-field>
+  <mat-form-field class="mini-margin"  appearance="fill">
+    <mat-label>{{ 'unidades' | oTranslate }}</mat-label>
+    <input matInput formControlName="unidades">
+  </mat-form-field>
+  <div class="mini-margin"  fxLayout="row">
+    <mat-form-field class="mini-margin"  appearance="fill">
+      <mat-label>{{ 'PVP' | oTranslate }} &euro;</mat-label>
+      <input matInput type="text" (blur)="onInputChange($event)"  formControlName="precioVentaCentimos">
+      <span matTextSuffix>€</span>
+    </mat-form-field>
+    <div class="mini-margin">
+      <mat-slide-toggle formControlName="emblistable">{{ 'emblistable' | oTranslate }}</mat-slide-toggle>
+    </div>
+  </div>
+
+  <mat-form-field class="mini-margin"  class="mini-margin ">
+    <mat-label>{{ 'forma.farmaceutica' | oTranslate }}</mat-label>
+    <mat-select formControlName="idFormaFarmaceutica">
+      <mat-option *ngFor="let forma of comboFormaFarmaceutica" [value]="forma.id">
+        {{forma.descripcion}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <mat-form-field class="mini-margin"  appearance="fill">
+    <mat-label>{{ 'codigo.barras' | oTranslate }}</mat-label>
+    <input matInput formControlName="codigoBarras">
+  </mat-form-field>
+</div>

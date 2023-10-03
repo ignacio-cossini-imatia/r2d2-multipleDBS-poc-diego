@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+div{
+  width: 100%;
+}
+.mini-margin{
+  margin: 4px ;
+}
+
+.alto{
+  height: 100%;
+}
+div > mat-form-field{
+  margin: auto;
+  width: 80%;
+}

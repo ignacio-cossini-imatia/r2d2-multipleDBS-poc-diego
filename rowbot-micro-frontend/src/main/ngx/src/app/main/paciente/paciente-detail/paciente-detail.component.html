@@ -1,0 +1,92 @@
+<div class="mat-elevation-z8 " [formGroup]="pacienteUpdate"  fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="space-between center" >
+
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+    <button mat-raised-button (click)='delete()'>Borrar</button>
+  </div>
+
+  <mat-form-field class="mini-margin " appearance="outline" >
+    <mat-label>id</mat-label>
+    <input matInput [readonly]="true" formControlName="id" disabled>
+  </mat-form-field>
+  <div  fxLayoutAlign="space-around center" fxLayout="row">
+
+  <div class="alto" fxLayout="column" fxLayoutAlign="space-around center" fxflex="20%">
+    <mat-form-field class="mini-margin " appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput  formControlName="nombre" required>
+    </mat-form-field>
+    <mat-form-field class="mini-margin " appearance="fill">
+      <mat-label>Apellido</mat-label>
+      <input matInput   formControlName="apellidos" required>
+    </mat-form-field>
+    <div fxLayout="row" fxflex="100%">
+      <mat-form-field class="mini-margin ">
+        <mat-label>Sexo</mat-label>
+        <mat-select  formControlName="sexo">
+          <mat-option *ngFor="let sexo of sexos" [value]="sexo.value">
+            {{sexo.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="mini-margin " >
+        <mat-label>Fecha Nacimiento</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento" required>
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle  [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxflex="100%">
+      <mat-form-field class="mini-margin " appearance="fill">
+        <mat-label>DNI</mat-label>
+        <input matInput oninput="this.value = this.value.toUpperCase()" formControlName="dni" required>
+      </mat-form-field>
+
+      <mat-form-field class="mini-margin " appearance="fill">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="telefono">
+      </mat-form-field>
+    </div>
+    <mat-form-field class="mini-margin " appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email">
+    </mat-form-field>
+    <mat-form-field class="mini-margin ">
+      <mat-label>Notas</mat-label>
+      <textarea matInput formControlName="notas"></textarea>
+    </mat-form-field>
+
+  </div>
+  <div class="alto" formGroupName="direccion" fxLayoutAlign="space-around center" fxLayout="column">
+
+      <mat-form-field class="mini-margin " appearance="fill">
+        <mat-label>Calle</mat-label>
+        <input matInput formControlName="calle" required>
+      </mat-form-field>
+      <mat-form-field class="mini-margin " appearance="fill">
+        <mat-label>Portal</mat-label>
+        <input matInput formControlName="portal">
+      </mat-form-field>
+      <mat-form-field class="mini-margin " appearance="fill">
+        <mat-label>Piso</mat-label>
+        <input matInput formControlName="piso">
+      </mat-form-field>
+      <mat-form-field class="mini-margin " appearance="fill">
+        <mat-label>Codigo Postal</mat-label>
+        <input matInput formControlName="codigoPostal">
+      </mat-form-field>
+      <mat-form-field class="mini-margin " appearance="fill">
+        <mat-label>Ciudad</mat-label>
+        <input matInput formControlName="ciudad">
+      </mat-form-field>
+
+  </div>
+  </div>
+
+
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+    <button mat-raised-button (click)='goBack()'>Cancelar</button>
+    <button mat-raised-button (click)='save()'>Save</button>
+  </div>
+</div>

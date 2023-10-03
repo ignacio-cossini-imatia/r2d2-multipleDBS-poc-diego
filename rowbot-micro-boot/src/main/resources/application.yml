@@ -1,0 +1,116 @@
+endpoints:
+  api:
+    enabled: true
+logging:
+  level:
+    root: info
+ontimize:
+  corsfilter:
+    enabled: true
+  globalcors:
+    cors-configurations:
+      '[/**]':
+        allowed-origins: '*'
+        allowed-headers: '*'
+        exposed-headers: ['X-Auth-Token','Content-disposition','X-Requested-With']
+        allowed-methods:
+          - GET
+          - POST
+          - PUT
+          - OPTIONS
+          - DELETE
+  jdbc:
+    datasource:
+      enabled: false
+    name-convention: lower
+    sqlhandler: postgres
+    sql-condition-processor:
+      upper-string: true
+      upper-like: true
+  multitenant:
+    enabled: true
+    configuration:
+      store-repository:
+        url: ${TENANT_MANAGER}
+        username: ${TENANT_MANAGER_USERNAME}
+        password: ${TENANT_MANAGER_PASSWORD}
+        tenant-id: tenantId
+        tenant-name: tenantName
+        db-driver: dbDriver
+        db-url: dbUrl
+        db-username: dbUsername
+        db-password: dbPassword
+        auth-url: authUrl
+        auth-realm: authRealm
+        auth-client: authClient
+        auth-front-client: authFrontClient
+      migration:
+        type: flyway
+        path: 'classpath:/db/migration'
+  security:
+    mode: keycloak
+    keycloak:
+      public-client: true
+      use-resource-role-mappings: true
+      realms-provider: custom
+    ignore-paths: '/index.html,/app/**,/error,/ontimize/health,/tenant,/userTenants'
+    role-information-service:
+      role-repository: RoleDao
+      role-name-column: rol_name
+      server-permission-query-id: serverPermissions
+      server-permission-name-column: srp_name
+      client-permission-query-id: clientPermissions
+      client-permission-column: rol_xml_client_permission
+server:
+  port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+  compression:
+    enabled: true
+    mime-types: application/json, application/xml
+spring:
+  application:
+    name: imatiaspd
+  flyway:
+    enabled: false
+  main:
+    banner-mode: 'off'
+  session:
+    store-type: none
+    jdbc:
+      initialize-schema: always
+  resources:
+    static-locations: classpath:/ngx/dist/, classpath:/public/
+  autoconfigure:
+    exclude: |
+      org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration, org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration, org.springframework.boot.autoconfigure.security.FallbackWebSecurityAutoConfiguration
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: false
+    open-in-view: false
+    properties:
+      javax:
+        persistence:
+          validation:
+            mode: none
+    hibernate:
+      ddl-auto: none
+      temp:
+        use_jdbc_metadata_defaults: false
+  h2:
+    console:
+      enabled: true
+  sql:
+    init:
+      mode: never
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiql
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;MODE=MySQL
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+environment:
+  profile: ${ENVIRONMENT_PROFILE:#{'production'}}

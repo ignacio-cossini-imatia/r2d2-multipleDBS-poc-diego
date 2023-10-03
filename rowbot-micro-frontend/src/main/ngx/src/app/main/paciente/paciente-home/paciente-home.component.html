@@ -1,0 +1,60 @@
+<div class="mat-elevation-z8">
+
+  <mat-toolbar class="mat-toolbar-single-row" >
+    <div class="mat-toolbar-tools" fxLayout="row" fxLayoutAlign="space-around center">
+      <button mat-stroked-button (click)='delete()' color="warn">Delete</button>
+      <button mat-raised-button (click)="createNew()"> nuevo paciente </button>
+    </div>
+  </mat-toolbar>
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef> Select </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="nombre">
+      <th mat-header-cell *matHeaderCellDef> nombre </th>
+      <td mat-cell *matCellDef="let paciente"> {{paciente.nombre}} </td>
+    </ng-container>
+    <ng-container matColumnDef="apellidos">
+      <th mat-header-cell *matHeaderCellDef> apellidos </th>
+      <td mat-cell *matCellDef="let paciente"> {{paciente.apellidos}} </td>
+    </ng-container>
+    <ng-container matColumnDef="dni">
+      <th mat-header-cell *matHeaderCellDef> dni </th>
+      <td mat-cell *matCellDef="let paciente"> {{paciente.dni}} </td>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> email </th>
+      <td mat-cell *matCellDef="let paciente"> {{paciente.email}} </td>
+    </ng-container>
+    <ng-container matColumnDef="telefono">
+      <th mat-header-cell *matHeaderCellDef> telefono </th>
+      <td mat-cell *matCellDef="let paciente"> {{paciente.telefono}} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+        mat-row
+        (click)="clickedRows(row)"
+        *matRowDef="let row; columns: displayedColumns;"
+    ></tr>
+  </table>
+  <mat-paginator #paginator
+                  class="demo-paginator"
+                  (page)="handlePageEvent($event)"
+                  [length]="length"
+                  [pageSize]="pageSize"
+                  [disabled]="disabled"
+                  [showFirstLastButtons]="showFirstLastButtons"
+                  [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                  [hidePageSize]="hidePageSize"
+                  [pageIndex]="pageIndex"
+                  aria-label="Select page">
+    </mat-paginator>
+
+  </div>

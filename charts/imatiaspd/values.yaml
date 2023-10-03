@@ -1,0 +1,121 @@
+# This is a YAML-formatted file.
+
+# Deployment configuration
+replicaCount: 1
+image:
+  pullPolicy: IfNotPresent
+  ## provided as basic setup. replace as needed
+  repository: 179934523585.dkr.ecr.eu-west-3.amazonaws.com/imatiaspd
+  version: 0.0.2.alpha.5309330684.1
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations:
+  prometheus.io/path: "/ontimize/prometheus"
+  prometheus.io/port: "8081"
+  prometheus.io/scrape: "true"
+# Add labels to the pods
+podsLabels: {}
+# Add labels to the deployment
+deploymentLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+## liveness/readiness probes. standard ontimize endpoints
+probePath: /ontimize/health
+probePort: 8081
+livenessProbe:
+  initialDelaySeconds: 60
+  periodSeconds: 15
+  successThreshold: 1
+  timeoutSeconds: 1
+  ### Optional distinct liveness probe path, if empty the probePath is used
+  probePath: /ontimize/health/liveness
+readinessProbe:
+  initialDelaySeconds: 70
+  failureThreshold: 3
+  periodSeconds: 15
+  successThreshold: 1
+  timeoutSeconds: 1
+  ### Optional distinct readiness probe path, if empty the probePath is used
+  probePath: /ontimize/health/readiness
+## Adapt resources if needed
+resources:
+  limits:
+    cpu: 400m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+database:
+  service: main-development-pg-db.cgrvjx9wau6r.eu-west-3.rds.amazonaws.com
+## Observability
+micrometer:
+  metrics:
+    tags:
+      source: SpringBoot
+## Be sure to set API key in secret *******-grafana-api-key, key apiKey
+grafana:
+  enabled: true
+  server: http://grafana.grafana:80
+  datasourceName: Prometheus
+  secret: imatiaspd-grafana-api-key
+
+# Optional configmap.
+configmap:
+  enabled: false
+  ## defaults to chart name
+  #name:
+  #data:
+  #  key: "value"
+  #  key2: "value2"
+
+
+
+
+# Service configuration. Annotations are used by cert-manager to generate certificates using cluster-issuer
+service:
+  name: imatiaspd
+  type: ClusterIP
+  externalPort: 80
+  internalPort: 8080
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: cert-manager-letsencrypt-production-route53
+  host: imatiaspd.dev.imatia.cloud
+  tls:
+    secretName: imatiaspd-tls
+    enabled: true
+
+# tenant management. The application is a tenant manager
+tenantManagement:
+  enabled: false
+  # advanced mode. Enables the configuration for organization management
+  advanced: false
+  #keycloak:
+    #adminUser: user
+
+# tenant manager. Location of the Ontimize Tenant Manager if used.
+tenantManager:
+  enabled: true
+  url: "https://imatiaspdtm.dev.imatia.cloud"
+  #uncomment to give a specific name to the tenant manager secret (if exists won't be created)
+  secret: imatiaspd-tm-secret
+
+# Kafka. If used. Will be provided as environment variables to the pods.
+kafka:
+  enabled: false
+  server: "schema-registry-kafka:9092"
+  schemaRegistryUrl: "http://kafka"
+
+s3:
+  enabled: false
+  secret: s3-secret
+

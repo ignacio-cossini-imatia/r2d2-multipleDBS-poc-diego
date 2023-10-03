@@ -1,0 +1,44 @@
+version: '3'
+
+volumes:
+  imatiaspdtm-dbvol:
+  keycloak-vol:
+services:
+  imatiaspdtmdb:
+    image: bitnami/postgresql:11.14.0-debian-10-r21
+    environment:
+      - POSTGRESQL_USERNAME=imatiaspdtmuser
+      - POSTGRESQL_PASSWORD=imatiaspdtmpass
+      - POSTGRESQL_DATABASE=imatiaspdtmdb
+      - POSTGRESQL_POSTGRES_PASSWORD=imatiaspdtmpass
+    container_name: imatiaspdtm-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - imatiaspdtm-dbvol:/bitnami/postgresql
+    restart: always
+
+  imatiaspdkeycloakdb:
+    image: postgres
+    environment:
+      POSTGRES_DB: keycloakdb
+      POSTGRES_USER: keycloakuser
+      POSTGRES_PASSWORD: keycloakpassword
+    container_name: imatiaspd-keycloak-db
+    ports:
+      - "5433:5432"
+  keycloak:
+    container_name: imatiaspd-keycloak
+    image: docker.io/bitnami/keycloak:20.0.3
+    environment:
+      KEYCLOAK_DATABASE_HOST: imatiaspd-keycloak-db
+      KEYCLOAK_DATABASE_NAME: keycloakdb
+      KEYCLOAK_DATABASE_USER: keycloakuser
+      KEYCLOAK_DATABASE_PASSWORD: keycloakpassword
+      KEYCLOAK_ADMIN_USER: admin
+      KEYCLOAK_ADMIN_PASSWORD: Pa55w0rd
+      KEYCLOAK_EXTRA_ARGS_PREPENDED: "--spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true"
+    ports:
+      - "8082:8080"
+    volumes:
+      - keycloak-vol:/opt/bitnami/keycloak/themes/implatform-fashion/
