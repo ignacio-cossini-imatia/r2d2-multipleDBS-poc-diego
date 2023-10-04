@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -24,10 +26,14 @@ public class DatabasesServiceImpl implements DatabasesService {
 	public void addDB(String name) throws SQLException {
 		externalDbsConfiguration.addDB(name);
 	}
+	@Override
+	public void addDB(String name, String type) throws SQLException {
+		externalDbsConfiguration.addDB(name, type);
+	}
 
 	@Override
-	public Object getDB(String name) {
-		return externalDbsConfiguration.getDataSources().get(name);
+	public DataSource getDB(String name) {
+		return (DataSource) externalDbsConfiguration.getDataSources().get(name);
 	}
 
 	@Override
@@ -45,10 +51,16 @@ public class DatabasesServiceImpl implements DatabasesService {
 	//TODO: eliminar y montar un controlador para hacer esto de forma más normal
 	@PostConstruct
 	private void testing() throws SQLException {
-		System.out.println("creamos DBs de prueba:");
-		addDB("prueba1");
-		addDB("prueba2");
-		addDB("prueba3");
+		System.out.println("me conecto a la DB de prueba:");
+		addDB("prueba1","MySQL");
+		System.out.println("Conectado, buscando tablas:");
+		String[] types = {"TABLE"};
+		ResultSet tablasResultSet = getDB("prueba1").getConnection()
+				.getMetaData()
+				.getTables("prueba1", null, "%", types);
+		while(tablasResultSet.next()){
+			System.out.println(tablasResultSet.getString(3));
+		}
 		addDB("miDB");
 	}
 

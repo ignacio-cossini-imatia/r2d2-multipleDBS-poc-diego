@@ -3,6 +3,7 @@ package com.imatia.implatform.imatiaspd.model.core.config;
 import com.imatia.implatform.imatiaspd.model.core.config.dbrouting.DataSourceBasedMultiTenantConnectionProviderImpl;
 import com.imatia.implatform.imatiaspd.model.core.config.dbrouting.DataSourceRouter;
 import com.imatia.implatform.imatiaspd.model.core.config.dbrouting.CurrentDBIdentifierResolver;
+import com.imatia.implatform.imatiaspd.model.core.service.DatasourceUtils;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.cfg.Environment;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
@@ -34,7 +35,16 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ExternalDbsConfiguration {
 	//TODO: darle una vuelta para simplificar lo que se pueda
 	private final String MAIN_DB = "MAIN_DB";
-	private final DataSource mainDBDatasource= buildDS(MAIN_DB);
+	private final DataSource mainDBDatasource;
+
+	{
+		try {
+			mainDBDatasource = DatasourceUtils.buildDS(MAIN_DB);
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	private Map<Object, Object> targetDataSources = initTargetDataSources();
 
 
@@ -44,13 +54,6 @@ public class ExternalDbsConfiguration {
 		return targetDataSources;
 	}
 
-	private static DataSource buildDS(String dbName){
-		return new EmbeddedDatabaseBuilder()
-				.setType(EmbeddedDatabaseType.H2)
-				.setName(dbName)
-				.addScript("schema.sql")
-				.build();
-	}
 
 	private AbstractRoutingDataSource multipleDbDatasource;
 
@@ -94,7 +97,11 @@ public class ExternalDbsConfiguration {
 	@Bean(name = "externalDbsDatasource")
 	public DataSource clientDatasource() {
 		multipleDbDatasource = new DataSourceRouter();
-		multipleDbDatasource.setDefaultTargetDataSource(buildDS(MAIN_DB));
+		try {
+			multipleDbDatasource.setDefaultTargetDataSource(DatasourceUtils.buildDS(MAIN_DB));
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 		multipleDbDatasource.setTargetDataSources(targetDataSources);
 		multipleDbDatasource.afterPropertiesSet();
 		return multipleDbDatasource;
@@ -109,7 +116,15 @@ public class ExternalDbsConfiguration {
 	}
 
 	public void addDB(String name) throws SQLException {
-		DataSource dataSource = buildDS(name);
+		DataSource dataSource = DatasourceUtils.buildDS(name);
+
+		try(Connection c = dataSource.getConnection()) {
+			targetDataSources.put(name, dataSource);
+			multipleDbDatasource.afterPropertiesSet();
+		}
+	}
+	public void addDB(String name, String type) throws SQLException {
+		DataSource dataSource = DatasourceUtils.buildDS(name, type);
 
 		try(Connection c = dataSource.getConnection()) {
 			targetDataSources.put(name, dataSource);
