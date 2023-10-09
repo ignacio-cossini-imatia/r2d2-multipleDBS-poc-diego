@@ -15,7 +15,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 		<org.projectlombok.version>1.18.26</org.projectlombok.version>
 		<org.projectlombok.lombok-mapstruct-binding.version>0.2.0</org.projectlombok.lombok-mapstruct-binding.version>
@@ -120,6 +120,11 @@
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
 			<version>8.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.annotation</groupId>

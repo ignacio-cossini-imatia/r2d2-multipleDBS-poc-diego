@@ -20,7 +20,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<spring-boot.repackage.skip>true</spring-boot.repackage.skip>
 		<frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
 	</properties>

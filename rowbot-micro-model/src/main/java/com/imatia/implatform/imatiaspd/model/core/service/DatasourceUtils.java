@@ -1,6 +1,7 @@
 package com.imatia.implatform.imatiaspd.model.core.service;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
+import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
@@ -16,15 +17,20 @@ public abstract class DatasourceUtils {
 		if (databaseType==null){
 			return buildH2Datasource(dbName);
 		}
-		switch (databaseType) {
+		switch (databaseType) {//TODO: esto tiene que ser un enumerado
 			case "MySQL":
 				return buildMySQLDatasource(dbName);
-			case "H2":  default:
+			case "Postgres":
+				return buildPostgresDatasource(dbName);
+			case "H2": default://TODO: probablemente lo mejor sea que default=> exception
 				return buildH2Datasource(dbName);
 
 		}
 	}
-
+	//TODO: esto deberá aceptar un objeto que contenga toda la info necesaria para la conexión con una bbdd de su tipo
+	//mismo comentario para todos los métodos similares
+	//Podría ser una buena opción crear una suerte de DatasourceBuilder abstracto, cuyas implementaciones serían de tipos de bbdd
+	//concretos ie: MySQLDatasourceBuilder y tendrían la lógica concreta para cada tipo(o tipo+versión en algunos casos)
 	private static DataSource buildH2Datasource(String dbName){
 			return new EmbeddedDatabaseBuilder()
 					.setType(EmbeddedDatabaseType.H2)
@@ -33,6 +39,15 @@ public abstract class DatasourceUtils {
 					.build();
 	}
 
+	private static DataSource buildPostgresDatasource(String dbName){
+		PGSimpleDataSource datasource = new PGSimpleDataSource();
+		datasource.setServerName("localhost");
+		datasource.setPortNumber(5432);
+		datasource.setUser("postgres");
+		datasource.setPassword("postgres_pass");
+		datasource.setDatabaseName(dbName);
+		return datasource;
+	}
 	private static DataSource buildMySQLDatasource(String dbName) throws SQLException {
 		MysqlDataSource dataSource = new MysqlDataSource();
 		dataSource.setDatabaseName(dbName);
