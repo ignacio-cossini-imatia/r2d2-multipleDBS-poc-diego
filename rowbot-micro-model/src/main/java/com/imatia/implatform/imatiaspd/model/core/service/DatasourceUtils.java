@@ -1,5 +1,10 @@
 package com.imatia.implatform.imatiaspd.model.core.service;
 
+import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -7,6 +12,8 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+
+import static java.util.Collections.singletonList;
 
 public abstract class DatasourceUtils {
 	public static DataSource buildDS(String dbName) throws SQLException {
@@ -60,4 +67,15 @@ public abstract class DatasourceUtils {
 		return dataSource;
 	}
 
+	public static MongoDatabase buildMongoDb(String dbName){
+		MongoCredential credential = MongoCredential
+				.createCredential("root", "admin", "mongo_pass".toCharArray());
+
+		return MongoClients.create(MongoClientSettings.builder()
+				.applyToClusterSettings(builder -> builder
+						.hosts(singletonList(new ServerAddress("localhost", 27017))))
+				.credential(credential)
+				.build()).getDatabase(dbName);
+
+	}
 }

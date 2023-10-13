@@ -3,7 +3,7 @@ package com.imatia.implatform.imatiaspd.model.core.service;
 import java.sql.SQLException;
 import java.util.Map;
 
-public interface DatabasesService {
+public interface SQLDatabasesService {
 	Map<Object, Object> getAllDBs();
 	void addDB(String name) throws SQLException;
 

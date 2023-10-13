@@ -1,7 +1,7 @@
 package com.imatia.implatform.imatiaspd.model.core.service.impl;
 
 import com.imatia.implatform.imatiaspd.model.core.config.ExternalDbsConfiguration;
-import com.imatia.implatform.imatiaspd.model.core.service.DatabasesService;
+import com.imatia.implatform.imatiaspd.model.core.service.SQLDatabasesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
-public class DatabasesServiceImpl implements DatabasesService {
+public class SQLDatabasesServiceImpl implements SQLDatabasesService {
 	@Autowired
 	ExternalDbsConfiguration externalDbsConfiguration;
 
@@ -142,9 +142,9 @@ public class DatabasesServiceImpl implements DatabasesService {
 
 	@PostConstruct
 	private void testing() throws SQLException {
-		final String DBName = "postgres";
-		addDB(DBName, "Postgres");
-		exploreDBToConsoleOutput("postgres");
+//		final String DBName = "postgres";
+//		addDB(DBName, "Postgres");
+//		exploreDBToConsoleOutput("postgres");
 	}
 
 

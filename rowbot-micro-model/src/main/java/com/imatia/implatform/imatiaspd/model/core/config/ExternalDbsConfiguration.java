@@ -78,8 +78,6 @@ public class ExternalDbsConfiguration {
 				//.persistenceUnit(MAIN_DB)
 				.properties(additionalJpaProperties(multiTenantConnectionProvider, currentTenantIdentifierResolver))
 				.build();
-
-
 	}
 
 	private Map<String,?> additionalJpaProperties(MultiTenantConnectionProvider multiTenantConnectionProvider,
