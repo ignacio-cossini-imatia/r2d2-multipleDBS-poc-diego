@@ -48,22 +48,22 @@ public class MongoDatabasesServiceImpl implements MongoDatabasesService {
 
 	@PostConstruct
 	private void testing() throws SQLException {
-		String db = "db_mongo1";
-		System.out.println("Colecciones encontradas en bbdd "+db);
-		List<String> collectionNames=getCollectionNames(db);
-		collectionNames.forEach(
-				colName->{
-						System.out.println(colName);
-						System.out.println("Datos en esta coleccion: ");
-					try {
-						getDocuments(db, colName,0).forEach(
-								System.out::println);
-					} catch (SQLException e) {
-						throw new RuntimeException(e);
-					}
-
-				}
-		);
+//		String db = "db_mongo1";
+//		System.out.println("Colecciones encontradas en bbdd "+db);
+//		List<String> collectionNames=getCollectionNames(db);
+//		collectionNames.forEach(
+//				colName->{
+//						System.out.println(colName);
+//						System.out.println("Datos en esta coleccion: ");
+//					try {
+//						getDocuments(db, colName,0).forEach(
+//								System.out::println);
+//					} catch (SQLException e) {
+//						throw new RuntimeException(e);
+//					}
+//
+//				}
+//		);
 	}
 
 

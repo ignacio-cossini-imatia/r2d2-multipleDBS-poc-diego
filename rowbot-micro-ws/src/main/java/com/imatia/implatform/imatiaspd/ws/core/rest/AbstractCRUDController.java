@@ -32,10 +32,10 @@ public abstract class AbstractCRUDController<E extends H2Entity, S extends CRUDS
 		//		if(validationError != null){
 		//			return new ResponseEntity<String>(validationError, HttpStatus.BAD_REQUEST);
 		//		}
-		DatabaseContextHolder.set("miDB");
+		DatabaseContextHolder.set("MAIN_DB");
 		E createdEntity;
 		try {
-			createdEntity = service.create("miDB", entity);
+			createdEntity = service.create("MAIN_DB", entity);
 		} catch (ValidationException ex) {
 			logger.debug(ex.getMessage());
 			DatabaseContextHolder.clear();
@@ -54,7 +54,7 @@ public abstract class AbstractCRUDController<E extends H2Entity, S extends CRUDS
 		//		}
 		E updatedEntity;
 		try {
-			updatedEntity = service.update("miDB", entity);
+			updatedEntity = service.update("MAIN_DB", entity);
 		} catch (ValidationException ex) {
 			logger.debug(ex.getMessage());
 			return new ResponseEntity<String>(validationProblemMessage(ex), HttpStatus.BAD_REQUEST);
@@ -74,7 +74,7 @@ public abstract class AbstractCRUDController<E extends H2Entity, S extends CRUDS
 	@DeleteMapping(path = "/{id}")
 	public ResponseEntity delete(@PathVariable(name = "id", required = true) final Long entityId) {
 		try {
-			service.delete("miDB", entityId);
+			service.delete("MAIN_DB", entityId);
 		} catch (IdNotExistentOnDBException ex) {
 			logger.debug(ex.getMessage());
 			return new ResponseEntity<>(nonexistentEntityIdMessage(entityId), HttpStatus.NOT_FOUND);
@@ -84,7 +84,7 @@ public abstract class AbstractCRUDController<E extends H2Entity, S extends CRUDS
 
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<E> read(@PathVariable(name = "id", required = true) final Long entityId) {
-		return service.read("miDB", entityId).map(entity -> new ResponseEntity<E>(entity, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+		return service.read("MAIN_DB", entityId).map(entity -> new ResponseEntity<E>(entity, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 
 //	@GetMapping(path = "/search")

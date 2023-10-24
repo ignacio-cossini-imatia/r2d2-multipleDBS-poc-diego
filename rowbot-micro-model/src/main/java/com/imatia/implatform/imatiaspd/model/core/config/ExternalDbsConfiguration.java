@@ -75,7 +75,7 @@ public class ExternalDbsConfiguration {
 		return builder
 				.dataSource(domainsDataSource)
 				.packages("com.imatia.implatform.imatiaspd.model.core.service.domain.h2")
-				//.persistenceUnit(MAIN_DB)
+				.persistenceUnit(MAIN_DB)
 				.properties(additionalJpaProperties(multiTenantConnectionProvider, currentTenantIdentifierResolver))
 				.build();
 	}
